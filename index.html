@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap By SKILLHUB</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .main {
+            display: flex;
+            flex-wrap: wrap;
+
+            width: 350px;
+            justify-content: center;
+            gap: 5px;
+
+
+        }
+
+        .box {
+            border: 2px solid;
+            height: 100px;
+            width: 100px;
+            transition: 0.3s;
+        }
+
+        .box:hover {
+            transform: scale(0.7);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 
+        algorithm
+
+        step 1 : print 9 boxes
+        step 2 : add back-color on click
+        step 3 : toggle color
+        step 4 : prevent color override
+        step 5 : add winner logic
+        step 6 : show score
+        step 7 : handle draw logic
+        step 8 : handle restart logic
+
+    -->
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <div id="result"></div>
+
+                <table id="stat" class="text-center table table-dark table-striped table-hover d-none">
+                    <thead>
+                        <tr>
+                            <th class="table-danger" id="player1Name">Red</th>
+                            <th class="table-primary" id="player2Name">Blue</th>
+                            <th class="table-secondary">Draw</th>
+                            <th class="table-warning">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="table-danger"><span id="redWinCount">0</span></td>
+                            <td class="table-primary"><span id="blueWinCount">0</span></td>
+                            <td class="table-secondary"><span id="drawWinCount">0</span></td>
+                            <td class="table-warning"><span id="TotalMatchCount">0</span> </td>
+                        </tr>
+                        <tr class="table-light">
+                            <td colspan="4">
+                                <div class="progress position-relative ">
+                                    <div id="redProgress"
+                                        class="progress-bar progress-bar-striped progress-bar-animated  bg-danger">
+
+                                    </div>
+                                    <div id="blueProgress"
+                                        class="progress-bar progress-bar-striped progress-bar-animated bg-primary">
+
+                                    </div>
+                                    <div id="drawProgress"
+                                        class="progress-bar progress-bar-striped progress-bar-animated bg-dark">
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <div class="card" id="playerCard">
+                    <div class="card-header">Start Game</div>
+                    <div class="card-body">
+                        <input id="player1" type="text" class="form-control" placeholder="Player 1 Name">
+                        <select class="form-select">
+                            <option value="red">red</option>
+                            <option value="blue">blue</option>
+                            <option value="green">green</option>
+                        </select>
+                        <br>
+                        <input id="player2" type="text" class="form-control" placeholder="Player 2 Name">
+                        <select class="form-select">
+                            <option value="red">red</option>
+                            <option value="blue">blue</option>
+                            <option value="green">green</option>
+                        </select>
+                        <br>
+                        <button onclick="startGame()" type="button" class="btn btn-primary">Start Game</button>
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+            </div>
+
+
+
+            <div class="card col-sm-6 offset-sm-3 d-none" id="gameCard">
+                <div class="card-header text-center">Tic Tac Toe</div>
+                <div class="card-body col-sm-6 offset-sm-3">
+                    <!-- print 9 boxes -->
+                    <div class="main ">
+                        <div onclick="game('box1')" id="box1" class="box"></div>
+                        <div onclick="game('box2')" id="box2" class="box"></div>
+                        <div onclick="game('box3')" id="box3" class="box"></div>
+                        <div onclick="game('box4')" id="box4" class="box"></div>
+                        <div onclick="game('box5')" id="box5" class="box"></div>
+                        <div onclick="game('box6')" id="box6" class="box"></div>
+                        <div onclick="game('box7')" id="box7" class="box"></div>
+                        <div onclick="game('box8')" id="box8" class="box"></div>
+                        <div onclick="game('box9')" id="box9" class="box"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let chance = true
+        let redWinCount = 0
+        let blueWinCount = 0
+        let drawWinCount = 0
+        let p1;
+        let p2;
+
+
+        function startGame() {
+
+            p1 = document.getElementById("player1")
+            p2 = document.getElementById("player2")
+
+            if (p1.value == "") {
+                p1.classList.add("is-invalid")
+            }
+            if (p2.value == "") {
+                p2.classList.add("is-invalid")
+            }
+            if (p1.value && p2.value) {
+                document.getElementById("stat").classList.remove("d-none")
+                document.getElementById("gameCard").classList.remove("d-none")
+                document.getElementById("playerCard").classList.add("d-none")
+            }
+
+            document.getElementById("player1Name").innerHTML = p1.value
+            document.getElementById("player2Name").innerHTML = p2.value
+
+
+
+        }
+
+
+        function game(id) {
+            // console.log("clicked", id);
+            // document.querySelector(`#${id}`).classList.add("bg-danger")
+            // document.querySelector("#" + id).classList.add("bg-danger")
+
+            let box = document.getElementById(id)
+            if (!(box.classList.contains("bg-danger") || box.classList.contains("bg-primary"))) {
+
+
+                chance
+                    ? box.classList.add("bg-danger")
+                    : box.classList.add("bg-primary");
+                chance = !chance
+
+            }
+            checkWinner(box)
+
+        }
+
+        function checkWinner(box) {
+            let redBox = []
+            let blueBox = []
+            let fill = []
+
+            for (let i = 0; i < 9; i++) {
+                redBox.push(document.getElementById(`box${i + 1}`).classList.contains("bg-danger"))
+                blueBox.push(document.getElementById(`box${i + 1}`).classList.contains("bg-primary"))
+                if (document.getElementById(`box${i + 1}`).classList.contains("bg-primary") || document.getElementById(`box${i + 1}`).classList.contains("bg-danger")) {
+                    fill.push("hello")
+                }
+            }
+
+
+            switch (true) {
+                case redBox[0] && redBox[1] && redBox[2]: displayResult("red"); break;
+                case redBox[3] && redBox[4] && redBox[5]: displayResult("red"); break;
+                case redBox[6] && redBox[7] && redBox[8]: displayResult("red"); break;
+                case redBox[0] && redBox[3] && redBox[6]: displayResult("red"); break;
+                case redBox[1] && redBox[4] && redBox[7]: displayResult("red"); break;
+                case redBox[2] && redBox[5] && redBox[8]: displayResult("red"); break;
+                case redBox[0] && redBox[4] && redBox[8]: displayResult("red"); break;
+                case redBox[2] && redBox[4] && redBox[6]: displayResult("red"); break;
+
+                case blueBox[0] && blueBox[1] && blueBox[2]: displayResult("blue"); break;
+                case blueBox[3] && blueBox[4] && blueBox[5]: displayResult("blue"); break;
+                case blueBox[6] && blueBox[7] && blueBox[8]: displayResult("blue"); break;
+                case blueBox[0] && blueBox[3] && blueBox[6]: displayResult("blue"); break;
+                case blueBox[1] && blueBox[4] && blueBox[7]: displayResult("blue"); break;
+                case blueBox[2] && blueBox[5] && blueBox[8]: displayResult("blue"); break;
+                case blueBox[0] && blueBox[4] && blueBox[8]: displayResult("blue"); break;
+                case blueBox[2] && blueBox[4] && blueBox[6]: displayResult("blue"); break;
+
+                default: fill.length === 9 && displayResult("draw")
+
+
+            }
+
+
+
+        }
+
+        function resetGame() {
+            for (let i = 0; i < 9; i++) {
+                document.getElementById(`box${i + 1}`).classList.remove("bg-danger")
+                document.getElementById(`box${i + 1}`).classList.remove("bg-primary")
+
+            }
+            chance = true
+
+        }
+
+
+        function displayResult(arg) {
+            let classes = ""
+            let message = ""
+            // handle alert classes , wincount increement and message to display start
+            switch (arg) {
+                case "red": redWinCount++; classes = " text-danger"; message = `${p1.value} is Winner`; break
+                case "blue": blueWinCount++; classes = "text-primary"; message = `${p2.value} is Winner`; break
+                case "draw": drawWinCount++; classes = "text-dark"; message = "Match is Draw"; break
+
+
+            }
+            // handle alert classes , wincount increement and message to display end
+
+            console.log(`
+            Red :${redWinCount}
+            Blue :${blueWinCount}
+            Draw :${drawWinCount}
+            Total :${redWinCount + blueWinCount + drawWinCount}
+            `);
+
+            let TotalCount = redWinCount + blueWinCount + drawWinCount
+            document.getElementById("redWinCount").innerHTML = redWinCount
+            document.getElementById("blueWinCount").innerHTML = blueWinCount
+            document.getElementById("drawWinCount").innerHTML = drawWinCount
+            document.getElementById("TotalMatchCount").innerHTML = TotalCount
+
+            console.log("Red", (redWinCount / TotalCount) * 100);
+            console.log("Blue", (blueWinCount / TotalCount) * 100);
+            console.log("Draw", (drawWinCount / TotalCount) * 100);
+
+
+            document.getElementById("redProgress").style.width = `${(redWinCount / TotalCount) * 100}%`
+            document.getElementById("blueProgress").style.width = `${(blueWinCount / TotalCount) * 100}%`
+            document.getElementById("drawProgress").style.width = `${(drawWinCount / TotalCount) * 100}%`
+
+
+            document.getElementById("result").innerHTML = `<div class="${classes}">
+               <h1> ${message}</h1>
+               <hr/>
+               <div class="d-flex gap-4">
+                <div class="spinner-border"></div>
+                <p> Please wait, Restarting Game</p>
+                </div>
+                </div>`
+            document.getElementById("gameCard").classList.add("d-none")
+            resetGame()
+
+            setTimeout(function () {
+                document.getElementById("result").innerHTML = ""
+                document.getElementById("gameCard").classList.remove("d-none")
+
+            }, 2000)
+
+
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
+
+
+
+<!-- git command
+
+    git init
+    git add README.md
+    git add index.html
+    git commit -m "first commit"
+    git branch -M main
+    git remote add origin https://github.com/Satyamsable12/tic_tac_toe_game.git
+    git push -u origin main
+
+    git remote add origin https://github.com/Satyamsable12/tic_tac_toe_game.git
+    git branch -M main
+    git push -u origin main
+
+
+    if want to change the code then type command
+    git add .
+    git commit -m "sizes updated"
+    git push origin master
+
+-->
